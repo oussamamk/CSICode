@@ -754,6 +754,13 @@ void Midi_ControlSurface::ProcessMidiWidget(int &lineNumber, ifstream &surfaceTe
             else if (widgetType == "FB_QConLiteDisplayLower")
                 widget->GetFeedbackProcessors().push_back(make_unique<QConLiteDisplay_Midi_FeedbackProcessor>(csi_, this, widget, 3, 0x14, 0x12, atoi(tokenLines[i][1].c_str())));
         }
+        else if ((widgetType == "FB_LCUDisplayUpper" || widgetType == "FB_LCUDisplayLower") && size == 2)
+        {
+            if (widgetType == "FB_LCUDisplayUpper")
+                widget->GetFeedbackProcessors().push_back(make_unique<MCUDisplay_Midi_FeedbackProcessor>(csi_, this, widget, 0, 0x10, 0x12, atoi(tokenLines[i][1].c_str())));
+            else if (widgetType == "FB_LCUDisplayLower")
+                widget->GetFeedbackProcessors().push_back(make_unique<MCUDisplay_Midi_FeedbackProcessor>(csi_, this, widget, 1, 0x10, 0x12, atoi(tokenLines[i][1].c_str())));
+        }
     }
 }
 
