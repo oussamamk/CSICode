@@ -2482,14 +2482,16 @@ class FB_MCU_AssignmentDisplay_Midi_FeedbackProcessor : public Midi_FeedbackProc
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 {
 private:
-    int lastFirstLetter_;
+    unsigned char firstDigit_;
+    unsigned char secondDigit_;
 
 public:
-    FB_MCU_AssignmentDisplay_Midi_FeedbackProcessor(CSurfIntegrator *const csi, Midi_ControlSurface *surface, Widget *widget) : Midi_FeedbackProcessor(csi, surface, widget)
+    FB_MCU_AssignmentDisplay_Midi_FeedbackProcessor(CSurfIntegrator* const csi, Midi_ControlSurface* surface, Widget* widget) : Midi_FeedbackProcessor(csi, surface, widget)
     {
-        lastFirstLetter_ = 0x00;
+        firstDigit_ = 0;
+        secondDigit_ = 0;
     }
-    
+
     virtual const char *GetName() override { return "FB_MCU_AssignmentDisplay_Midi_FeedbackProcessor"; }
 
     virtual void ForceClear() override
@@ -2499,26 +2501,19 @@ public:
         SendMidiMessage(0xB0, 0x4B, 0x20);
         SendMidiMessage(0xB0, 0x4A, 0x20);
     }
-    
-    virtual void SetValue(const PropertyList &properties, double value) override
+
+    virtual void SetValue(const PropertyList& properties, double value) override
     {
-        if (value == 0.0) // Selected Track
+        int channelOffset = surface_->GetPage()->GetTrackOffset() + 1;
+        unsigned char firstDigit = channelOffset % 10;
+        unsigned char secondDigit = ((channelOffset - firstDigit) / 10) % 10;
+
+        if (firstDigit_ != firstDigit || secondDigit_ != secondDigit)
         {
-            if (lastFirstLetter_ != 0x13)
-            {
-                lastFirstLetter_ = 0x13;
-                SendMidiMessage(0xB0, 0x4B, 0x13); // S
-                SendMidiMessage(0xB0, 0x4A, 0x05); // E
-            }
-        }
-        else if (value == 1.0) // Track
-        {
-            if (lastFirstLetter_ != 0x07)
-            {
-                lastFirstLetter_ = 0x07;
-                SendMidiMessage(0xB0, 0x4B, 0x07); // G
-                SendMidiMessage(0xB0, 0x4A, 0x0C); // L
-            }
+            firstDigit_ = firstDigit;
+            secondDigit_ = secondDigit;
+            SendMidiMessage(0xB0, 0x4B, secondDigit + '0');
+            SendMidiMessage(0xB0, 0x4A, firstDigit_ + '0');
         }
     }
 };
