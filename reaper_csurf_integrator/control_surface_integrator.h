@@ -3035,7 +3035,7 @@ protected:
     vector<MediaTrack *> tracks_;
     vector<MediaTrack *> selectedTracks_;
 
-    bool isFolderViewActive_ = false;
+    bool isFolderViewActive_ = true;
     int currentFolderTrackID_ = 0; // 0 is for root folder
     MediaTrack* parentOfCurrentFolderTrack_ = nullptr;
 
@@ -3134,6 +3134,17 @@ public:
     {
         return isFolderViewActive_;
     }
+
+    void ToggleWindowScrollLink()
+    {
+        isWindowsScrollLinkActive_ = !isWindowsScrollLinkActive_;
+    }
+
+    bool GetIsWindowScrollLinkActive() const
+    {
+        return isWindowsScrollLinkActive_;
+    }
+
 
     void VCAModeActivated()
     {
@@ -3980,6 +3991,8 @@ public:
     Navigator * GetFocusedFXNavigator() { return trackNavigationManager_->GetFocusedFXNavigator(); }
     void ToggleFolderView() { trackNavigationManager_->ToggleFolderView(); }
     bool GetIsFolderViewActive() { return trackNavigationManager_->GetIsFolderViewActive(); }
+    void ToggleWindowScrollLink() { trackNavigationManager_->ToggleWindowScrollLink(); }
+    bool GetIsWindowScrollLinkActive() { return trackNavigationManager_->GetIsWindowScrollLinkActive(); }
     MediaTrack* SetCurrentFolder(MediaTrack* track) { return trackNavigationManager_->SetCurrentFolder(track); }
     MediaTrack* ExitCurrentFolder() { return trackNavigationManager_->ExitCurrentFolder(); }
     bool IsAtRootFolderLevel() { return trackNavigationManager_->IsAtRootFolderLevel(); }
