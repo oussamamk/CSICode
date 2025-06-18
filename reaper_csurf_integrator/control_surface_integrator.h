@@ -3035,7 +3035,7 @@ protected:
     vector<MediaTrack *> tracks_;
     vector<MediaTrack *> selectedTracks_;
 
-    bool isFolderViewActive_ = false;
+    bool isFolderViewActive_ = true;
     int currentFolderTrackID_ = 0; // 0 is for root folder
     MediaTrack* parentOfCurrentFolderTrack_ = nullptr;
 
