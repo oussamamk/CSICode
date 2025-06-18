@@ -1067,6 +1067,7 @@ void CSurfIntegrator::InitActionsDictionary()
     actions_.insert(make_pair("TrackToggleFolderSpill", make_unique<TrackToggleFolderSpill>()));
     actions_.insert(make_pair("TrackFolderParentDisplay", make_unique<TrackFolderParentDisplay>()));
     actions_.insert(make_pair("ToggleFolderView", make_unique<ToggleFolderView>()));
+    actions_.insert(make_pair("ToggleWindowScrollLink", make_unique<ToggleFolderView>()));
     actions_.insert(make_pair("TrackEnterFolder", make_unique<TrackEnterFolder>()));
     actions_.insert(make_pair("ExitCurrentFolder", make_unique<ExitCurrentFolder>()));
     actions_.insert(make_pair("TrackSelect", make_unique<TrackSelect>()));
@@ -3439,7 +3440,20 @@ void TrackNavigationManager::ForceScrollLink()
     auto it = std::find(tracks_.begin(), tracks_.end(), sel);
     if (it != tracks_.end())
     {
-        setTrackOffset((int)std::distance(tracks_.begin(), it));
+        int ammount = 0;
+        if (isWindowsScrollLinkActive_)
+        {
+            int offset = (int)std::distance(tracks_.begin(), it);
+            if (trackNavigators_.size())
+                ammount = (offset / (int)trackNavigators_.size()) * (int)trackNavigators_.size();
+            else
+                ammount = offset;
+        }
+        else
+        {
+            ammount = (int)std::distance(tracks_.begin(), it);
+        }
+        setTrackOffset(ammount);
         page_->OnTrackSelectionBySurface(sel);
     }
     else

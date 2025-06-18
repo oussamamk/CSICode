@@ -3465,6 +3465,36 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ToggleWindowScrollLink : public Action
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+{
+public:
+    virtual const char* GetName() override
+    {
+        return "ToggleWindowScrollLink";
+    }
+
+    virtual void RequestUpdate(ActionContext* context) override
+    {
+        if (context->GetPage()->GetIsWindowScrollLinkActive())
+            context->UpdateWidgetValue(1.0);
+        else
+            context->UpdateWidgetValue(0.0);
+    }
+
+    virtual void Do(ActionContext* context, double value) override
+    {
+        if (value == 0.0)
+            return;
+
+        Page* page = context->GetPage();
+        page->ToggleWindowScrollLink();
+        page->OnTrackListChange();
+        page->ForceUpdateTrackColors();
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackEnterFolder : public Action
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 {
