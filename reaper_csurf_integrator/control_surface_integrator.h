@@ -3094,6 +3094,7 @@ public:
         trackNavigators_.clear();
     }
     
+    int GetTrackOffset() { return trackOffset_; }
     void RebuildTracks();
     void RebuildSelectedTracks();
     void AdjustSelectedTrackBank(int amount);
@@ -3835,6 +3836,7 @@ public:
         surfaces_.clear();
     }
         
+    int GetTrackOffset() { return trackNavigationManager_->GetTrackOffset(); }
     const char *GetName() { return name_.c_str(); }
     
     ModifierManager *GetModifierManager() { return modifierManager_.get(); }
@@ -4113,7 +4115,8 @@ private:
     
     int projectMetronomePrimaryVolumeOffs_; // for double -- if invalid, use fallbacks
     int projectMetronomeSecondaryVolumeOffs_; // for double -- if invalid, use fallbacks
-        
+    int trackOffset_;
+
     void InitActionsDictionary();
 
     double GetPrivateProfileDouble(const char *key)
